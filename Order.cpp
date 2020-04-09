@@ -8,7 +8,7 @@ using namespace std;
 
 PrepareTheOrder::PrepareTheOrder(){
     possibilities[0] = "Add product to the order";
-    possibilities[1] = "Delete product from the order";
+    possibilities[1] = "Remove product from the order";
     possibilities[2] = "See your order";
     possibilities[3] = "Place the order";
     possibilities[4] = "Exit";
@@ -20,83 +20,119 @@ PrepareTheOrder::PrepareTheOrder(){
 
 void PrepareTheOrder::takeTheOrder(){
 
-    cout << "What do you want to do?" << endl;
-    for(int i = 0; i < 5; i++){
-        printf("%d. %s\n", i+1, possibilities[i].c_str());
-    }
-    cout << endl;
-    int choice;
-    cin >> choice;
-    cout << endl;
-    string exitDecision;
+    while (1){
 
-    switch(choice){
+        cout << "What do you want to do?" << endl;
+        for(int i = 0; i < 5; i++){
+            printf("%d. %s\n", i+1, possibilities[i].c_str());
+        }
+        cout << endl;
+        int choice;
+        cin >> choice;
+        cout << endl;
+        string exitDecision;
 
-        case 1:
-            addProductToTheOrder();
-            break;
+        switch(choice){
 
-        case 2:
-            deleteProductFromTheOrder();
-            break;
+            case 1:
+                addProductToTheOrder();
+                break;
 
-        case 3:
-            printTheOrder();
-            break;
+            case 2:
+                removeProductFromTheOrder();
+                break;
 
-        case 4:
-            placeTheOrder();
-            break;
+            case 3:
+                printTheOrder();
+                break;
 
-        case 5:
-            cout << "Are you sure you want to exit? " << "[yes/no]" << endl;
-            cin >> exitDecision;
-            if(exitDecision == "yes")
-                exit(0);
-            else{
-                cout << endl;
+            case 4:
+                placeTheOrder();
+                break;
+
+            case 5:
+                cout << "Are you sure you want to exit? " << "[yes/no]" << endl;
+                cin >> exitDecision;
+                if(exitDecision == "yes")
+                    exit(0);
+                else{
+                    cout << endl;
+                    takeTheOrder();
+                }
+                break;
+
+            default:
+                cout << "Incorrect selection. Please try again." << endl << endl;
                 takeTheOrder();
-            }
-            break;
 
-        default:
-            cout << "Incorrect selection. Please try again." << endl;
-            takeTheOrder();
-
+        }
     }
+
+}
+
+bool PrepareTheOrder::isEmpty(){
+    if(numberOfProducts == 0) {
+        cout << "Your order is empty! Add products using the appropriate options." << endl << endl;
+        takeTheOrder();
+        return true;
+    }
+    else
+        return false;
 }
 
 void PrepareTheOrder::placeTheOrder(){
+    if(isEmpty()) return;
     deliveryMethod();
     paymentMethod();
-    cout << endl << "Summary of your order:" << endl;
+    cout << endl << "Summary of your order:" << endl << endl;
     printTheOrder();
-    cout << endl << "Delivery method: " << deliveryChoice << endl;
+    cout << "Delivery method: " << deliveryChoice << endl;
     if(deliveryChoice == "Home delivery"){
         cout << "Delivery address: " << deliveryAddress << endl;
     }
     cout << "Your phone number: " << phoneNumber << endl << "Payment method: " << paymentChoice << endl;
     cout << endl << "Thank you for using our services!" << endl;
+    exit(0);
 
 }
 
 void PrepareTheOrder::printTheOrder(){
-    if(numberOfProducts == 0) {
-        cout << "Your order is empty! Add products using the appropriate options." << endl << endl;
-        takeTheOrder();
-    }
-    cout << endl << "Your order: " << endl;
+    if(isEmpty()) return;
+    cout << "Your order: " << endl;
     int sumOfPrices = 0;
-    printf("%-30s | %s\n", "Product", "Price");
-    printf("--------------------------------------------\n");
+    printf("%-6s | %-30s | %s\n", "Number", "Product", "Price");
+    printf("------------------------------------------------\n");
     for(int i = 1; i <= numberOfProducts; i++){
-        printf("%-30s | %d $\n", products[i-1].c_str(), prices[i-1]);
+        printf("%-6d | %-30s | %d $\n", i, products[i-1].c_str(), prices[i-1]);
         sumOfPrices += prices[i-1];
     }
-    cout << endl << "Order cost: " << sumOfPrices << '$' << endl;
+    cout << endl << "Order cost: " << sumOfPrices << '$' << endl << endl;
 }
 
-void PrepareTheOrder::deleteProductFromTheOrder(){
+void PrepareTheOrder::removeProductFromTheOrder(){
+    int removeProduct;
+    if(isEmpty()) return;
+    printTheOrder();
+    cout << "Select the product to be removed (or select 123 to cancel): " << endl << endl;
+    cin >> removeProduct;
+    if(removeProduct == 123){
+        cout << endl;
+        takeTheOrder();
+    }
+
+    else if(removeProduct > numberOfProducts || removeProduct < 1){
+        cout << endl << "Incorrect selection. Please try again." << endl << endl;
+        removeProductFromTheOrder();
+        return;
+    }
+    else{
+        for(int i = removeProduct-1; i < numberOfProducts-1; i++){
+            prices[i] = prices[i+1];
+            products[i] = products[i+1];
+        }
+        numberOfProducts--;
+        cout << endl << "Product has been removed from your order." << endl << endl;
+    }
 
 }
 
@@ -156,11 +192,10 @@ void PrepareTheOrder::addProductToTheOrder(){
             break;
     }
 
-    placeTheOrder();
 }
 
 void PrepareTheOrder::deliveryMethod(){
-    cout << endl << "Choose a delivery method: " << endl;
+    cout << "Choose a delivery method: " << endl;
     string delivery[2];
     delivery[0] = "Personal pickup";
     delivery[1] = "Home delivery";
@@ -172,14 +207,14 @@ void PrepareTheOrder::deliveryMethod(){
     cin >> choice;
     if(choice == 1){
         deliveryChoice = "Personal pickup";
-        cout << "Please enter your phone number: " << endl;
+        cout << endl << "Please enter your phone number: " << endl;
         cin >> phoneNumber;
         cout << endl << "Our address is 13 Example Street, London." << endl << "We will send you a message when your order is ready (usually half an hour after placing it)." << endl;
     }
 
     else if(choice == 2){
         deliveryChoice = "Home delivery";
-        cout << "Please enter your enter delivery address: " << endl;
+        cout << endl << "Please enter your enter delivery address: " << endl;
         cin.ignore();
         getline(cin, deliveryAddress);
         cout << endl << "Please enter your phone number: " << endl;
@@ -211,7 +246,7 @@ void PrepareTheOrder::paymentMethod(){
     cin >> choice;
     if(choice == 1){
         paymentChoice = "Cash";
-        cout << "You will be asked to pay when picking up the order." << endl;
+        cout << endl << "You will be asked to pay when picking up the order." << endl;
     }
 
     else if(choice == 2){

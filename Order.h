@@ -23,9 +23,10 @@ public:
     void deliveryMethod();
     void paymentMethod();
     void addProductToTheOrder();
-    void deleteProductFromTheOrder();
+    void removeProductFromTheOrder();
     void printTheOrder();
     void placeTheOrder();
+    bool isEmpty();
 };
 
 #endif // ORDER
