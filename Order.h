@@ -2,14 +2,16 @@
 #define ORDER
 
 #include <string>
+#include <cstdio>
 
 class PrepareTheOrder{
 protected:
     static const int maxNumberOfProducts = 10;
     std::string possibilities [5];
+    std::string dishes[4];
     std::string products[maxNumberOfProducts];
     int prices[maxNumberOfProducts];
-    int sumOfPrices;
+    int sumOfPrices = 0;
     int numberOfProducts = 0;
 
 public:
