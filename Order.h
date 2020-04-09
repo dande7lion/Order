@@ -11,8 +11,11 @@ protected:
     std::string dishes[4];
     std::string products[maxNumberOfProducts];
     int prices[maxNumberOfProducts];
-    int sumOfPrices = 0;
     int numberOfProducts = 0;
+    std::string deliveryAddress;
+    int phoneNumber;
+    std::string deliveryChoice;
+    std::string paymentChoice;
 
 public:
     PrepareTheOrder();

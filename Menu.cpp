@@ -72,7 +72,7 @@ void Dessert::createTheMenu(){
 
 
 void Drink::createTheMenu(){
-    string tempProducts [] = {"Cola", "Ice tea", "Orange juice", "Apple juice", "water"};
+    string tempProducts [] = {"Cola", "Ice tea", "Orange juice", "Apple juice", "Water"};
     int tempPrices [] = {3, 3, 2, 2, 2};
     int tempNumber = sizeof(tempPrices)/sizeof(*tempPrices);
     fillTheMenu(tempNumber, tempProducts, tempPrices);

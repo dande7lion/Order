@@ -5,14 +5,14 @@
 
 class Product {
 protected:
-    double price;
     int numberOfProducts;
-    std::string productName;
     static const int maxNumber = 5;
     std::string possibleProducts [maxNumber];
     int possiblePrices [maxNumber];
 
 public:
+    std::string productName;
+    int price;
     void chooseProduct();
     void productAdded();
     void fillTheMenu(int, std::string [], int []);

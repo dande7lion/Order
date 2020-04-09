@@ -64,16 +64,29 @@ void PrepareTheOrder::takeTheOrder(){
             takeTheOrder();
 
     }
-    printTheOrder();
-
 }
 
 void PrepareTheOrder::placeTheOrder(){
+    deliveryMethod();
+    paymentMethod();
+    cout << endl << "Summary of your order:" << endl;
+    printTheOrder();
+    cout << endl << "Delivery method: " << deliveryChoice << endl;
+    if(deliveryChoice == "Home delivery"){
+        cout << "Delivery address: " << deliveryAddress << endl;
+    }
+    cout << "Your phone number: " << phoneNumber << endl << "Payment method: " << paymentChoice << endl;
+    cout << endl << "Thank you for using our services!" << endl;
 
 }
 
 void PrepareTheOrder::printTheOrder(){
+    if(numberOfProducts == 0) {
+        cout << "Your order is empty! Add products using the appropriate options." << endl << endl;
+        takeTheOrder();
+    }
     cout << endl << "Your order: " << endl;
+    int sumOfPrices = 0;
     printf("%-30s | %s\n", "Product", "Price");
     printf("--------------------------------------------\n");
     for(int i = 1; i <= numberOfProducts; i++){
@@ -142,12 +155,79 @@ void PrepareTheOrder::addProductToTheOrder(){
             addProductToTheOrder();
             break;
     }
+
+    placeTheOrder();
 }
 
 void PrepareTheOrder::deliveryMethod(){
+    cout << endl << "Choose a delivery method: " << endl;
+    string delivery[2];
+    delivery[0] = "Personal pickup";
+    delivery[1] = "Home delivery";
+    for(int i = 0; i < 2; i++){
+        cout << i+1 << ". " << delivery[i] << endl;
+    }
+    cout << endl << "Select 123 to cancel " << endl << endl;
+    int choice;
+    cin >> choice;
+    if(choice == 1){
+        deliveryChoice = "Personal pickup";
+        cout << "Please enter your phone number: " << endl;
+        cin >> phoneNumber;
+        cout << endl << "Our address is 13 Example Street, London." << endl << "We will send you a message when your order is ready (usually half an hour after placing it)." << endl;
+    }
 
+    else if(choice == 2){
+        deliveryChoice = "Home delivery";
+        cout << "Please enter your enter delivery address: " << endl;
+        cin.ignore();
+        getline(cin, deliveryAddress);
+        cout << endl << "Please enter your phone number: " << endl;
+        cin >> phoneNumber;
+    }
+
+    else if(choice == 123){
+        cout << endl;
+        takeTheOrder();
+    }
+
+    else {
+        cout << "Incorrect selection. Please try again." << endl;
+        deliveryMethod();
+    }
 }
+
 
 void PrepareTheOrder::paymentMethod(){
+    cout << endl << "Choose a payment method: " << endl;
+    string payment[2];
+    payment[0] = "Cash";
+    payment[1] = "Bank transfer";
+    for(int i = 0; i < 2; i++){
+        cout << i+1 << ". " << payment[i] << endl;
+    }
+    cout << endl << "Select 123 to cancel " << endl << endl;
+    int choice;
+    cin >> choice;
+    if(choice == 1){
+        paymentChoice = "Cash";
+        cout << "You will be asked to pay when picking up the order." << endl;
+    }
 
+    else if(choice == 2){
+        paymentChoice = "Bank transfer";
+        cout << endl << "Please make a transfer to this account: " << endl << "Account number: 12312312312312313123" << endl <<
+        "Title: " << "Order 1" << endl;
+    }
+
+    else if(choice == 123){
+        cout << endl;
+        takeTheOrder();
+    }
+
+    else {
+        cout << "Incorrect selection. Please try again." << endl;
+        paymentMethod();
+    }
 }
+
